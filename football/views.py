@@ -2,18 +2,21 @@ import datetime
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import render
+from django.views import View
 
 from .Football_club import models
 
 
 # Create your views here.
 def index(request):
+    template_name = 'index.html'
+
     return render(request, 'index.html')
 
 
-def players(request):
-    print(request.method)
-    if request.method == 'GET':
+class Players(View):
+    def get(self, request):
+        print(request.GET)
         if 'f_name' in request.GET:
             searched_text = request.GET['f_name']
             print(searched_text)
@@ -59,3 +62,14 @@ def detail(request, poll_id):
     else:
         return Http404("Poll does not exist")
     return HttpResponse(request.GET)
+
+
+class GreetingView(View):
+    greeting = "Good Day"
+
+    def get(self, request):
+        return HttpResponse(self.greeting)
+
+
+class MorningGreetingView(GreetingView):
+    greeting = "Morning to ya"
