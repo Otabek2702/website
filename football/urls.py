@@ -1,9 +1,9 @@
 from django.urls import path, re_path
-from .views import Players, contracts, players_re, detail, index, GreetingView
+from .views import PlayersView, contracts, players_re, detail, Index, GreetingView
 
 urlpatterns = [
-    path('', index),
-    path('players/', Players.as_view()),
+    path('', Index.as_view()),
+    path('players/', PlayersView.as_view()),
     path('players/<int:id>/', contracts),
     path('players/<int:id>/<slug:slug>', contracts),
     path('myview/<int:poll_id>', detail),

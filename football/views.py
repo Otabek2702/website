@@ -1,20 +1,23 @@
 import datetime
 
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.views import View
+from django.views.generic import ListView
+from .models import Player
 
 from .Football_club import models
 
 
 # Create your views here.
-def index(request):
-    template_name = 'index.html'
+class Index(ListView):
+    model = Player
+    print('asd1')
+    template_name = 'football/player_list.html'
+    context_object_name = 'players_list'
 
-    return render(request, 'index.html')
 
-
-class Players(View):
+class PlayersView(View):
     def get(self, request):
         print(request.GET)
         if 'f_name' in request.GET:
@@ -42,7 +45,7 @@ def contracts(request, id=None, slug=None):
         for item in models.Contract.objects():
             if item.id == int(id):
                 html += f"<img src='https://cdn.givemesport.com/wp-content/uploads/2022/03/GettyImages-1347865563" \
-                        f"-1200x1200-c-default.jpg' alt='TerStegen' height=200 width=200><br><h1>Salary: {item.salary}"\
+                        f"-1200x1200-c-default.jpg' alt='TerStegen' height=200 width=200><br><h1>Salary: {item.salary}" \
                         f"</h1"f"><br> "
                 return HttpResponse(html, status=200)
     return HttpResponse(html, status=404)

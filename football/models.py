@@ -4,7 +4,7 @@ from django.db import models
 
 # Create your models here.
 
-class Players(models.Model):
+class Player(models.Model):
     name = models.CharField(max_length=40)
     surname = models.CharField(max_length=40)
     player_number = models.PositiveIntegerField(blank=True)
@@ -13,14 +13,14 @@ class Players(models.Model):
     weight = models.FloatField(default=0)
 
     class Meta:
-        verbose_name_plural = "players"
+        verbose_name_plural = "player"
 
     def __str__(self):
         return f'{self.name} {self.surname}'
 
 
 class Contracts(models.Model):
-    contract = models.OneToOneField(Players, on_delete=models.CASCADE, name='contract')
+    contract = models.OneToOneField(Player, on_delete=models.CASCADE, name='contract')
     validity = models.DateField(default=date.today)
     salary = models.FloatField(default=0)
     # signer_id = models.ForeignKey()
