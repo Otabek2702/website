@@ -11,6 +11,7 @@ class Player(models.Model):
     birthday_date = models.DateField(default=date.today)
     height = models.FloatField(default=0)
     weight = models.FloatField(default=0)
+    image = models.ImageField(upload_to='media/players', null=True)
 
     class Meta:
         verbose_name_plural = "player"

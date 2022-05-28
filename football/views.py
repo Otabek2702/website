@@ -1,10 +1,8 @@
-import datetime
-
 from django.http import HttpResponse, Http404
-# from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import View
-from django.views.generic import ListView
-from .models import Player
+from django.views.generic import ListView, CreateView, UpdateView
+from .models import Player, Contracts
 
 from .Football_club import models
 
@@ -12,9 +10,31 @@ from .Football_club import models
 # Create your views here.
 class Index(ListView):
     model = Player
-    print('asd1')
     template_name = 'football/player_list.html'
     context_object_name = 'players_list'
+
+
+class ContractPlayerView(ListView):
+    template_name = 'football/player_by_contracts.html'
+    context_object_name = 'contracts'
+
+    def get_queryset(self):
+        self.contract = get_object_or_404(Player, id=self.kwargs['contract'])
+        return Contracts.objects.filter(contract_id=self.contract)
+
+
+class PlayerCreateView(CreateView):
+    model = Player
+    fields = ['name', 'surname', 'player_number', 'birthday_date', 'height', 'weight']
+    template_name = 'football/create_player.html'
+
+
+class PlayerUpdateView(UpdateView):
+    model = Player
+    template_name = 'football/update_player.html'
+    fields = ['name', 'surname', 'player_number', 'birthday_date', 'height', 'weight', 'image']
+
+    success_url = '/players'
 
 
 class PlayersView(View):
@@ -23,18 +43,17 @@ class PlayersView(View):
         if 'f_name' in request.GET:
             searched_text = request.GET['f_name']
             print(searched_text)
-            html = "<html><body>%s<h1 style=\"text-align: center\">Welcome to my page </h1></body></html><br>" \
-                   % datetime.datetime.now()
+            html = ''
             for item in models.Player.objects():
                 if searched_text.lower() in item.name.lower():
                     html += f"<a href={item.id}>{item.name} {item.surname}</a><br>"
             return HttpResponse(html)
         else:
-            html = "<html><body>%s<h1 style=\"text-align: center\">Welcome to my page </h1></body></html><br>" \
-                   % datetime.datetime.now()
-            for item in models.Player.objects():
-                html = html + f"<a href=/players/{item.id}>{item.name} {item.surname}</a><br>"
-            return HttpResponse(html, status=200)
+            return render(request, 'football/index.html', context={'players': Player.objects.all()})
+
+    def post(self, request):
+        print(self.request)
+        return HttpResponse('asd')
 
 
 def contracts(request, id=None, slug=None):

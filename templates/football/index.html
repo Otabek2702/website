@@ -5,14 +5,14 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zimbabwa parrots</title>
+  <title>Football players</title>
   <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
   <script src="https://kit.fontawesome.com/1a052ad93a.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div class="container my-5">
   <div class="d-flex justify-content-between">
-    <h1 class="h2">Zimbabwa parrots</h1>
+    <h1 class="h2">Football players</h1>
     <button class="btn btn-primary px-4" data-bs-toggle="modal" data-bs-target="#add-parrot-modal">
       <span class="me-2">Add parrot</span>
       <i class="fa-solid fa-plus"></i>
@@ -78,47 +78,51 @@
     </div>
     <section class="col-6">
       <div class="d-flex justify-content-between align-items-baseline">
-        <h2 class="h4 mb-4">Parrots list</h2>
+        <h2 class="h4 mb-4">Players list</h2>
         <p class="parrot-counter">Count: 2</p>
       </div>
-      <ul class="row list-unstyled g-3 parrots-wrapper">
-
-      </ul>
-    </section>
-    <section class="col-3">
-      <h2 class="h4 mb-4">Favorite parrots</h2>
-      <ul class="list-unstyled favorites w-100">
-        <!-- <li class="card p-3 mb-2">
-          <h3 class="card-title h5 mb-2">Qizil Ara</h3>
-          <button class="btn btn-danger btn-sm d-inline" style="width: fit-content" type="button">Remove</button>
-        </li> -->
-      </ul>
+      <div id="template_content">
+        {% for player in players %}
+          <div class="template_player_box">
+            <h1>{{ player.name }}{{ '' }}{{ player.surname }}</h1>
+            <img src="/media/{{ player.image }}" alt="image" style="width:100px;height:120px;">
+            <div class="product_info">
+              <p>Player №{{ player.player_number }}</p>
+              <h4>Birthday date:{{ player.birthay_date }}</h4><br>
+              <h4>Height:{{ player.birthay_date }}</h4><br>
+              <h4>Weight:{{ player.birthay_date }}</h4><br>
+              <div class="detail_button"><a href="/players/update/{{ player.id }}">Detail</a></div>
+            </div>
+            <div class="cleaner">&nbsp;</div>
+          </div>
+        {% endfor %}
+        <div class="cleaner_with_width">&nbsp;</div>
+      </div>
     </section>
   </div>
 </div>
-eee
 
 
 <div class="modal fade" id="add-parrot-modal" tabindex="-1" aria-labelledby="addParrotTitle" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addParrotTitle">Add parrot</h5>
+        <h5 class="modal-title" id="addParrotTitle">Add player</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form class="add-form">
+        <form class="add-form" method="POST">{% csrf_token %}
           <div class="mb-3">
-            <label for="parrot-title" class="form-label">Title</label>
-            <label for="title"></label><input type="search" class="form-control" id="title" placeholder="Kakatu">
+            <label for="parrot-title" class="form-label">Name</label>
+            <label for="name"></label><input type="search" class="form-control" id="name">
           </div>
           <div class="mb-3">
-            <label for="parrot-img" class="form-label">Img URL</label>
-            <label for="img"></label><input type="text" class="form-control" id="img" placeholder="https://...">
+            <label class="form-label">Surname</label>
+            <label for="surname"></label><input type="text" class="form-control" id="surname">
           </div>
           <div class="mb-3">
-            <label for="price" class="form-label">Price ($)</label>
-            <input type="number" class="form-control" id="price" placeholder="1000">
+            <label class="form-label">Player №</label>
+            <label for="player_no"></label><input type="number" class="form-control" id="player_no">
           </div>
           <div class="mb-3">
             <label for="parrot-date" class="form-label">Birth date</label>
@@ -128,20 +132,18 @@ eee
             <label class="form-label">Width and Height</label>
             <div class="row">
               <div class="col-6">
-                <input type="number" class="form-control" id="parrot_width" min="0" aria-label="Parrot width"
-                       placeholder="Parrot width">
+                <input type="number" class="form-control" id="player_width" min="0" aria-label="Parrot width">
               </div>
               <div class="col-6">
-                <input type="number" class="form-control" id="parrot_height" min="0" aria-label="Parrot height"
-                       placeholder="Parrot height">
+                <input type="number" class="form-control" id="player_height" min="0" aria-label="Parrot height">
               </div>
             </div>
           </div>
           <div class="mb-3">
-            <label for="features" class="form-label">Features ("," bilan ajratib yozing)</label>
-            <input type="text" class="form-control" id="features" placeholder="Qo'lga o'rgatilgan,Gapira oladi">
+            <label for="parrot-img" class="form-label">Img URL</label>
+            <label for="img"></label><input type="text" class="form-control" id="img" placeholder="https://...">
           </div>
-          <button type="submit" class="btn btn-primary d-block w-100 p-2">Filter</button>
+          <button type="submit" class="btn btn-primary d-block w-100 p-2">Add</button>
         </form>
       </div>
     </div>
